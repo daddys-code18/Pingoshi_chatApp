@@ -5,6 +5,7 @@ const Home = lazy(() => import("./pages/Home"))
 const Chat = lazy(() => import("./pages/Chat"))
 const Group = lazy(() => import("./pages/Group"))
 const Login = lazy(() => import("./pages/Login"))
+const NotFound = lazy(() => import("./pages/NotFound"))
 
 let user = true;
 
@@ -24,6 +25,8 @@ const App = () => {
         <Route path="/login" element={<ProtectRoute user={!user} redirect="/">
           <Login />
         </ProtectRoute>} />
+        <Route path="*" element={<NotFound />} />
+
 
       </Routes>
     </Router>
