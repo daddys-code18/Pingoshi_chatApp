@@ -3,6 +3,7 @@ import { User } from "../models/userModel.js";
 import { sendToken } from "../utils/features.js";
 import { TryCatch } from "../middleware/errorMiddleware.js";
 import { ErrorHandler } from "../utils/utility.js";
+import { cookieOptions } from "../utils/features.js";
 
 export const newUser = TryCatch(async (req, res) => {
   const { name, username, password, bio } = req.body;
@@ -32,4 +33,13 @@ export const getMyProfile = TryCatch(async (req, res) => {
     success: true,
     user,
   });
+});
+export const logout = TryCatch(async (req, res) => {
+  return res
+    .status(200)
+    .cookie("chat-App", "", { ...cookieOptions, maxAge: 0 })
+    .json({
+      success: true,
+      message: "Logged out successfully",
+    });
 });
