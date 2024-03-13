@@ -22,5 +22,4 @@ const requestSchema = new Schema(
   { timestamps: true }
 );
 
-export const Request =
-  mongoose.models.Request || model("Request", requestSchema);
+export const Request = model("Request", requestSchema);
