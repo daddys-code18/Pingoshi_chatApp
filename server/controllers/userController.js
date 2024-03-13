@@ -25,3 +25,11 @@ export const login = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler("Invalid UserName or Password", 404));
   sendToken(res, user, 200, `Welcome ${user.username}`);
 });
+
+export const getMyProfile = TryCatch(async (req, res) => {
+  const user = await User.findById(req.user);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});

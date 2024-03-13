@@ -18,6 +18,7 @@ const connectDB = (uri) => {
       throw err;
     });
 };
+
 const sendToken = (res, user, code, message) => {
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
   return res.status(code).cookie("chat-App", token, cookieOptions).json({
