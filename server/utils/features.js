@@ -1,4 +1,12 @@
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+
+const cookieOptions = {
+  maxAge: 15 * 60 * 60 * 1000,
+  sameSite: "none",
+  httpOnly: true,
+  seure: true,
+};
 
 const connectDB = (uri) => {
   mongoose
@@ -10,5 +18,12 @@ const connectDB = (uri) => {
       throw err;
     });
 };
+const sendToken = (res, user, code, message) => {
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+  return res.status(code).cookie("chat-App", token, cookieOptions).json({
+    success: true,
+    message,
+  });
+};
 
-export { connectDB };
+export { connectDB, sendToken };
