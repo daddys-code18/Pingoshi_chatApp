@@ -1,15 +1,18 @@
 import express, { urlencoded } from "express";
-import userRoute from "./routes/userRoutes.js";
 import { connectDB } from "./utils/features.js";
 import dotenv from "dotenv";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
 import cookieParser from "cookie-parser";
+import userRoute from "./routes/userRoutes.js";
+import chatRoute from "./routes/chatRoutes.js";
+import { createUser } from "./seeders/user.js";
 
 dotenv.config({
   path: "./.env",
 });
 const mongoURI = process.env.MONGO_URI;
 connectDB(mongoURI);
+// createUser(10);
 
 const app = express();
 
@@ -17,6 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use("/user", userRoute);
+app.use("/chat", chatRoute);
 
 app.get("/", (req, res) => {
   res.send("hello World");

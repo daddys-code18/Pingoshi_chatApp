@@ -43,3 +43,10 @@ export const logout = TryCatch(async (req, res) => {
       message: "Logged out successfully",
     });
 });
+export const searchUser = TryCatch(async (req, res) => {
+  const { name } = req.query;
+  return res.status(200).json({
+    success: true,
+    message: name,
+  });
+});
