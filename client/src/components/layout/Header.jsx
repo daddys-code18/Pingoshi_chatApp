@@ -1,5 +1,5 @@
 import { AppBar, Box, IconButton, Toolbar, Tooltip, Typography } from "@mui/material"
-import { useState } from "react"
+import { Suspense, lazy, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { orange } from './../../constants/color';
 import {
@@ -10,6 +10,10 @@ import {
     Notifications as NotificationsIcon,
     Logout as LogoutIcon
 } from "@mui/icons-material"
+
+const SearchDialog = lazy(() => import('../specific/Search'))
+const NotificationsDialog = lazy(() => import('../specific/Notifications'))
+const NewGroupDialog = lazy(() => import('../specific/Newgroup'))
 
 const Header = () => {
     const navigate = useNavigate()
@@ -86,6 +90,28 @@ const Header = () => {
                 </AppBar>
 
             </Box>
+            {
+                isSearch && (
+                    <Suspense fallback={<div>Loding ...</div>}>
+                        <SearchDialog />
+
+                    </Suspense>
+                )
+            }
+            {
+                isNotification && (
+                    <Suspense fallback={<div>Loding ...</div>}>
+                        <NotificationsDialog />
+                    </Suspense>
+                )
+            }
+            {
+                isNewGroup && (
+                    <Suspense fallback={<div>Loding ...</div>}>
+                        <NewGroupDialog />
+                    </Suspense>
+                )
+            }
 
         </>
     )
