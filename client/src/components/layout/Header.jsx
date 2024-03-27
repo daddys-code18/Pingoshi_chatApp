@@ -1,4 +1,4 @@
-import { AppBar, Box, IconButton, Toolbar, Tooltip, Typography } from "@mui/material"
+import { AppBar, Backdrop, Box, IconButton, Toolbar, Tooltip, Typography } from "@mui/material"
 import { Suspense, lazy, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { orange } from './../../constants/color';
@@ -92,7 +92,7 @@ const Header = () => {
             </Box>
             {
                 isSearch && (
-                    <Suspense fallback={<div>Loding ...</div>}>
+                    <Suspense fallback={<Backdrop open />}>
                         <SearchDialog />
 
                     </Suspense>
@@ -100,14 +100,16 @@ const Header = () => {
             }
             {
                 isNotification && (
-                    <Suspense fallback={<div>Loding ...</div>}>
+                    <Suspense fallback={<Backdrop open />}>
+
                         <NotificationsDialog />
                     </Suspense>
                 )
             }
             {
                 isNewGroup && (
-                    <Suspense fallback={<div>Loding ...</div>}>
+                    <Suspense fallback={<Backdrop open />}>
+
                         <NewGroupDialog />
                     </Suspense>
                 )
