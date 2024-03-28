@@ -44,12 +44,7 @@ export const sampleNotifications = [
 ];
 export const sampleMessage = [
   {
-    attachments: [
-      {
-        public_id: "adadadad",
-        url: "https://www.w3schools.com/howto/img_avatar.png",
-      },
-    ],
+    attachments: [],
     content: "This is a message with an attachment.",
     _id: "cssdvvsvvsvvv",
     sender: {
@@ -67,8 +62,7 @@ export const sampleMessage = [
         url: "https://www.w3schools.com/howto/img_avatar.png",
       },
     ],
-    content: "This is a message with an attachment.",
-    _id: "cssdvvsvvsvvv",
+    _id: "cssdvvsvvsvddvv",
     sender: {
       _id: "cacdcdc",
       name: "chaman",
