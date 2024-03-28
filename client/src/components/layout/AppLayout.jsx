@@ -4,6 +4,7 @@ import { sampleChats } from "../../constants/sampleData";
 import ChatList from "../specific/ChatList";
 import Header from "./Header";
 import { Grid } from '@mui/material';
+import Profile from "../specific/Profile";
 
 const AppLayout = () => (WrappedComponent) => {
 
@@ -38,7 +39,9 @@ const AppLayout = () => (WrappedComponent) => {
                         display: { xs: "none", md: "block" },
                         padding: "2rem",
                         bgcolor: "rgba(0,0,0,0.85)"
-                    }} height={"100%"}>Third</Grid>
+                    }} height={"100%"}>
+                        <Profile />
+                    </Grid>
 
                 </Grid>
 
