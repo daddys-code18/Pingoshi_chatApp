@@ -16,7 +16,7 @@ const Profile = () => {
                 marginBottom: "1rem",
                 border: " 5px solid white"
             }} />
-            <ProfileCard heading={"Bio"} text={"jk gg g jfkgjk  "} />
+            <ProfileCard heading={"Bio"} text={"Mern Developer  "} />
             <ProfileCard heading={"Username"} text={"pavankafare "} Icon={<UserNameIcon />} />
             <ProfileCard heading={"Name"} text={"Pavan Vilas Kafare  "} Icon={<FaceIcon />} />
             <ProfileCard heading={"Joined"} text={moment("2023-11-04T18:30:00.000Z").fromNow()} Icon={<CalendarIcon />} />
