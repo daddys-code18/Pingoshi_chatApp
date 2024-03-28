@@ -5,9 +5,16 @@ import { useRef } from 'react';
 import { AttachFile as AttachFileIcon, Send as SendIcon } from '@mui/icons-material';
 import { InputBox } from './../components/styles/StyledComponents';
 import FileMenu from '../components/dialogs/FileMenu';
+import { sampleMessage } from '../constants/sampleData';
+import MessageComponent from '../components/shared/MessageComponent';
 
 const Chat = () => {
-    const containerRef = useRef(null)
+    const containerRef = useRef(null);
+
+    const user = {
+        _id: "cacdcdc",
+        name: "Pavan Kafare"
+    }
     return (
         <>
             <Stack ref={containerRef}
@@ -21,6 +28,12 @@ const Chat = () => {
                     overflowX: "hidden",
                     overflowY: "auto"
                 }} >
+                {
+                    sampleMessage.map((i, index) => (
+                        <MessageComponent message={i} key={index}
+                            user={user} />
+                    ))
+                }
             </Stack>
             <form style={{ height: "10%" }}>
                 <Stack direction={"row"} height={"100%"}

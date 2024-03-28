@@ -42,3 +42,39 @@ export const sampleNotifications = [
     _id: "2",
   },
 ];
+export const sampleMessage = [
+  {
+    attachments: [
+      {
+        public_id: "adadadad",
+        url: "https://www.w3schools.com/howto/img_avatar.png",
+      },
+    ],
+    content: "This is a message with an attachment.",
+    _id: "cssdvvsvvsvvv",
+    sender: {
+      _id: "user._id",
+      name: "chaman",
+    },
+
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630z",
+  },
+  {
+    attachments: [
+      {
+        public_id: "adadadad",
+        url: "https://www.w3schools.com/howto/img_avatar.png",
+      },
+    ],
+    content: "This is a message with an attachment.",
+    _id: "cssdvvsvvsvvv",
+    sender: {
+      _id: "cacdcdc",
+      name: "chaman",
+    },
+
+    chat: "chatId",
+    createdAt: "2024-02-12T10:41:30.630z",
+  },
+];
