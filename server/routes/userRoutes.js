@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getMyNotiications,
   getMyProfile,
   login,
   logout,
@@ -10,6 +11,7 @@ import {
 import { multerUpload, singleAvatar } from "../middleware/multer.js";
 import { isAuthenticated } from "../middleware/auth.js";
 import {
+  acceptrequestvalidator,
   loginvalidator,
   registervalidator,
   sendFriendrequestvalidator,
@@ -31,5 +33,13 @@ app.put(
   validatehandler,
   sendFriendRequest
 );
+app.put(
+  "/acceptrequest",
+  isAuthenticated,
+  acceptrequestvalidator(),
+  validatehandler,
+  sendFriendRequest
+);
+app.get("/notifications", isAuthenticated, getMyNotiications);
 
 export default app;

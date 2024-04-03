@@ -69,6 +69,14 @@ const renamevalidator = () => [
 const sendFriendrequestvalidator = () => [
   body("userId", "Please Enter New User Id").notEmpty(),
 ];
+const acceptrequestvalidator = () => [
+  body("requestId", "Please Enter Request Id").notEmpty(),
+  body("accept")
+    .notEmpty()
+    .withMessage("Please Add Accept")
+    .isBoolean()
+    .withMessage("Accept must be a boolean"),
+];
 
 export {
   registervalidator,
@@ -83,4 +91,5 @@ export {
   chatIdvalidator,
   renamevalidator,
   sendFriendrequestvalidator,
+  acceptrequestvalidator,
 };
