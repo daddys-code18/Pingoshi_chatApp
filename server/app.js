@@ -5,11 +5,12 @@ import { errorMiddleware } from "./middleware/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoutes.js";
 import chatRoute from "./routes/chatRoutes.js";
-import {
-  createGroupChats,
-  createSingleChats,
-  createUser,
-} from "./seeders/user.js";
+// import { createMessageInChat } from "./seeders/chat.js";
+// import {
+//   createGroupChats,
+//   createSingleChats,
+//   createUser,
+// } from "./seeders/user.js";
 
 dotenv.config({
   path: "./.env",
@@ -17,8 +18,9 @@ dotenv.config({
 const mongoURI = process.env.MONGO_URI;
 connectDB(mongoURI);
 // createUser(10);
-createSingleChats(10);
-createGroupChats(10);
+// createSingleChats(10);
+// createGroupChats(10);
+// createMessageInChat("660d69f2f96566466988b109", 50);
 
 const app = express();
 
