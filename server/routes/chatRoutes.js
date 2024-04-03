@@ -8,7 +8,9 @@ import {
 import { isAuthenticated } from "../middleware/auth.js";
 import {
   addMembers,
+  deleteChat,
   getChatDetails,
+  getMessages,
   getMyChat,
   getMyGroups,
   leaveGroup,
@@ -27,6 +29,10 @@ app.put("/removemember", removeMembers);
 app.delete("/leave/:id", leaveGroup);
 app.post("/message", attachmentMulter, sendAttachments);
 
-app.route("/:id").get(getChatDetails).put(remaneGroup).delete();
+//get Message
+app.get("/message/:id", getMessages);
+
+// get Chat Details Rename,delete
+app.route("/:id").get(getChatDetails).put(remaneGroup).delete(deleteChat);
 
 export default app;
