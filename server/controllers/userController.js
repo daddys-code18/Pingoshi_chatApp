@@ -4,6 +4,7 @@ import { sendToken } from "../utils/features.js";
 import { TryCatch } from "../middleware/errorMiddleware.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { cookieOptions } from "../utils/features.js";
+import { Chat } from "./../models/chatModel.js";
 
 export const newUser = TryCatch(async (req, res) => {
   const { name, username, password, bio } = req.body;
@@ -43,10 +44,28 @@ export const logout = TryCatch(async (req, res) => {
       message: "Logged out successfully",
     });
 });
+
 export const searchUser = TryCatch(async (req, res) => {
-  const { name } = req.query;
+  const { name = "" } = req.query;
+  // Finding All My Chats
+  const myChats = await Chat.find({ groupChat: false, members: req.user });
+  // extracting all Users From chats means friend aor people i have chatted with /
+  const allUsersFromMyChats = myChats.flatMap((chat) => chat.members);
+
+  // Finding all Users except me and my Friends
+  const allUsersExceptMeAndFriends = await User.find({
+    _id: { $nin: allUsersFromMyChats },
+    name: { $regex: name, $options: "i" },
+  });
+  // modifying the response
+  const users = allUsersExceptMeAndFriends.map(({ _id, name, avatar }) => ({
+    _id,
+    name,
+    avatar: avatar.url,
+  }));
+
   return res.status(200).json({
     success: true,
-    message: name,
+    users,
   });
 });
