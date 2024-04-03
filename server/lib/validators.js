@@ -66,6 +66,9 @@ const renamevalidator = () => [
   param("id", "Please Enter chat ID").notEmpty(),
   body("name", "Please Enter New name").notEmpty(),
 ];
+const sendFriendrequestvalidator = () => [
+  body("userId", "Please Enter New User Id").notEmpty(),
+];
 
 export {
   registervalidator,
@@ -79,4 +82,5 @@ export {
   getMessagevalidator,
   chatIdvalidator,
   renamevalidator,
+  sendFriendrequestvalidator,
 };
