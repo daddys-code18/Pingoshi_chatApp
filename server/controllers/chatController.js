@@ -16,10 +16,6 @@ import { Message } from "./../models/messageModel.js";
 export const newGroupChat = TryCatch(async (req, res, next) => {
   const { name, members } = req.body;
 
-  if (members.length < 2)
-    return next(
-      new ErrorHandler("Group chat must have at least 3 members", 400)
-    );
   const allMembers = [...members, req.user];
   await Chat.create({
     name,
@@ -83,9 +79,6 @@ export const getMyGroups = TryCatch(async (req, res, next) => {
 
 export const addMembers = TryCatch(async (req, res, next) => {
   const { chatId, members } = req.body;
-
-  if (!members || members.length < 1)
-    return next(new ErrorHandler("Please provide members", 400));
 
   const chat = await Chat.findById(chatId);
   if (!chat) return next(new ErrorHandler("Chat Not Found", 404));
@@ -266,7 +259,7 @@ export const getChatDetails = TryCatch(async (req, res, next) => {
   }
 });
 
-export const remaneGroup = TryCatch(async (req, res, next) => {
+export const renameGroup = TryCatch(async (req, res, next) => {
   const chatId = req.params.id;
   const { name } = req.body;
 
@@ -348,3 +341,4 @@ export const getMessages = TryCatch(async (req, res, next) => {
     totalPages,
   });
 });
+
