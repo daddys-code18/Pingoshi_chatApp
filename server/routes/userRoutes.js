@@ -1,5 +1,7 @@
 import express from "express";
 import {
+  acceptFriendRequest,
+  getMyFriends,
   getMyNotiications,
   getMyProfile,
   login,
@@ -38,8 +40,9 @@ app.put(
   isAuthenticated,
   acceptrequestvalidator(),
   validatehandler,
-  sendFriendRequest
+  acceptFriendRequest
 );
 app.get("/notifications", isAuthenticated, getMyNotiications);
+app.get("/friends", isAuthenticated, getMyFriends);
 
 export default app;
