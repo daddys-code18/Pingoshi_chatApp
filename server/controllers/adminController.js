@@ -62,4 +62,31 @@ const allChats = TryCatch(async (req, res, next) => {
     chats: transformedChats,
   });
 });
-export { allUser, allChats };
+
+const allMessage = TryCatch(async (req, res, next) => {
+  const message = await Message.find({})
+    .populate("sender", "name avatar")
+    .populate("chat", "groupChat");
+
+  const transformedMessage = message.map(
+    ({ content, attachments, _id, sender, createdAt, chat }) => ({
+      _id,
+      attachments,
+      content,
+      createdAt,
+      chat: chat._id,
+      groupChat: chat.groupChat,
+      sender: {
+        _id: sender._id,
+        name: sender.name,
+        avatar: sender.avatar.url,
+      },
+    })
+  );
+
+  return res.status(200).json({
+    status: "success",
+    message: transformedMessage,
+  });
+});
+export { allUser, allChats, allMessage };
