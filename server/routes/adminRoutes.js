@@ -3,6 +3,7 @@ import {
   allChats,
   allMessage,
   allUser,
+  getDashBoardStats,
 } from "../controllers/adminController.js";
 const app = express.Router();
 
@@ -12,6 +13,6 @@ app.get("/logout");
 app.get("/users", allUser);
 app.get("/chats", allChats);
 app.get("/messages", allMessage);
-app.get("/stats");
+app.get("/stats", getDashBoardStats);
 
 export default app;
