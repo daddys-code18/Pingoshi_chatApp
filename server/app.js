@@ -17,6 +17,8 @@ dotenv.config({
   path: "./.env",
 });
 const mongoURI = process.env.MONGO_URI;
+export const adminSecretKey = process.env.ADMIN_SECRET_KEY || "PavanKafare";
+
 connectDB(mongoURI);
 // createUser(10);
 // createSingleChats(10);

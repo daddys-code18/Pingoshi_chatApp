@@ -6,11 +6,10 @@ import { Message } from "./../models/messageModel.js";
 import { ErrorHandler } from "../utils/utility.js";
 import jwt from "jsonwebtoken";
 import { cookieOptions } from "../utils/features.js";
+import { adminSecretKey } from "../app.js";
 
 const adminLogin = TryCatch(async (req, res, next) => {
   const { secretKey } = req.body;
-
-  const adminSecretKey = process.env.ADMIN_SECRET_KEY || "PavanKafare";
 
   const isMatched = secretKey === adminSecretKey;
 
@@ -39,6 +38,11 @@ const adminLogout = TryCatch(async (req, res, next) => {
       success: true,
       message: " LogOut SuccessFully",
     });
+});
+const getAdminData = TryCatch(async (req, res, next) => {
+  return res.status(200).json({
+    admin: true,
+  });
 });
 
 const allUser = TryCatch(async (req, res, next) => {
@@ -178,4 +182,5 @@ export {
   allChats,
   allMessage,
   getDashBoardStats,
+  getAdminData,
 };
