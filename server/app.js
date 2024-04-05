@@ -18,6 +18,7 @@ dotenv.config({
 });
 const mongoURI = process.env.MONGO_URI;
 export const adminSecretKey = process.env.ADMIN_SECRET_KEY || "PavanKafare";
+export const envMode = process.env.NODE_ENV.trim() || "PRODUCTION";
 
 connectDB(mongoURI);
 // createUser(10);
@@ -39,5 +40,7 @@ app.get("/", (req, res) => {
 });
 app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+  console.log(
+    `Server is running on port ${process.env.PORT} in ${envMode} Mode`
+  );
 });
