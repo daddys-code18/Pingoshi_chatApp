@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middleware/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoutes.js";
 import chatRoute from "./routes/chatRoutes.js";
+import adminRoute from "./routes/adminRoutes.js";
 // import { createMessageInChat } from "./seeders/chat.js";
 // import {
 //   createGroupChats,
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/user", userRoute);
 app.use("/chat", chatRoute);
+app.use("/admin", adminRoute);
 
 app.get("/", (req, res) => {
   res.send("hello World");
