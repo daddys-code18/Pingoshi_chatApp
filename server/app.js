@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoutes.js";
 import chatRoute from "./routes/chatRoutes.js";
 import adminRoute from "./routes/adminRoutes.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
 // import { createMessageInChat } from "./seeders/chat.js";
 // import {
 //   createGroupChats,
@@ -27,6 +29,8 @@ connectDB(mongoURI);
 // createMessageInChat("660d69f2f96566466988b109", 50);
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {});
 
 // Using Middleware
 app.use(express.json());
@@ -38,8 +42,17 @@ app.use("/admin", adminRoute);
 app.get("/", (req, res) => {
   res.send("hello World");
 });
+
+io.on("connection", (socket) => {
+  console.log(" A user connected", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log(" User Discount ");
+  });
+});
+
 app.use(errorMiddleware);
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log(
     `Server is running on port ${process.env.PORT} in ${envMode} Mode`
   );
