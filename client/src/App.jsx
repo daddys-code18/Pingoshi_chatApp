@@ -8,6 +8,7 @@ const Group = lazy(() => import("./pages/Group"))
 const Login = lazy(() => import("./pages/Login"))
 const NotFound = lazy(() => import("./pages/NotFound"))
 const AdminLogin = lazy(() => import("./pages/Admin/AdminLogin"))
+const DashBoard = lazy(() => import("./pages/Admin/DashBoard"))
 
 let user = true;
 
@@ -28,6 +29,7 @@ const App = () => {
             <Login />
           </ProtectRoute>} />
           <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<DashBoard />} />
 
           <Route path="*" element={<NotFound />} />
 

@@ -1,4 +1,4 @@
-import { Avatar, Button, Container, IconButton, Paper, Stack, TextField, Typography } from "@mui/material"
+import { Button, Container, Paper, TextField, Typography } from "@mui/material"
 import {
     useInputValidation,
     //  useStrongPassword 
@@ -45,7 +45,6 @@ const AdminLogin = () => {
                             <Button sx={{
                                 marginTop: "1rem"
                             }} variant="contained" color="primary" fullWidth type="submit">Login</Button>
-                            <Typography textAlign={"center"} m={"1rem"}>OR</Typography>
                         </form>
                     </>
 
