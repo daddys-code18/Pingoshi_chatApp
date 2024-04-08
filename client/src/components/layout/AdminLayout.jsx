@@ -18,8 +18,8 @@ const Link = styled(LinkComponent)`
 
 const adminTabs = [
     { name: "DashBoard", path: "/admin/dashboard", icon: <DashboardIcon /> },
-    { name: "Users", path: "/admin/users-managment", icon: <ManageAccountsIcon /> },
-    { name: "Chats", path: "/admin/chats-management", icon: <GroupsIcon /> },
+    { name: "Users", path: "/admin/users", icon: <ManageAccountsIcon /> },
+    { name: "Chats", path: "/admin/chats", icon: <GroupsIcon /> },
     { name: "Messages", path: "/admin/messages", icon: <MessageIcon /> },
 ];
 
