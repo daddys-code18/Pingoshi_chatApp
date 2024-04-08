@@ -3,6 +3,7 @@ import AdminLayout from '../../components/layout/AdminLayout'
 import { Container, Paper, Stack, Typography, Box } from "@mui/material"
 import moment from 'moment';
 import { CurveButton, SearchField } from '../../components/styles/StyledComponents';
+import { DoughnutChart, LineChart } from '../../components/specific/Chart';
 
 const DashBoard = () => {
     const Appbar = (
@@ -45,17 +46,22 @@ const DashBoard = () => {
 
         <AdminLayout>
             <Container component={"main"}>{Appbar}
-                <Stack direction={"row"} spacing={"2rem"} flexWrap={"wrap"}>
+                <Stack direction={{
+                    xs: "column",
+                    lg: "row"
+                }} flexWrap={"wrap"} justifyContent={"center"} alignItems={{
+                    xs: "center",
+                    lg: "stretch"
+                }} sx={{ gap: "2rem" }}>
                     <Paper elevation={3}
                         sx={{
                             padding: "2rem 3.5rem",
                             borderRadius: "1rem",
                             width: "100%",
                             maxWidth: "45rem",
-                            height: "25rem"
                         }}>
                         <Typography margin={"2rem 0"} variant='h4'>Last Messages</Typography>
-                        {"chat"}
+                        <LineChart value={[23, 56, 33, 67, 33, 2]} />
                     </Paper>
                     <Paper elevation={3}
                         sx={{
@@ -70,9 +76,8 @@ const DashBoard = () => {
                             position: "relative",
                             width: "100%",
                             maxWidth: "25rem",
-                            height: "25rem"
                         }}>
-                        {"Dougnut Chart"}
+                        <DoughnutChart labels={["Single chats", "Group Chats"]} value={[23, 66]} />
                         <Stack
                             position={"absolute"}
                             direction={"row"}
@@ -96,10 +101,10 @@ const DashBoard = () => {
 }
 
 const Widget = ({ title, value, Icon }) => (
-    <Paper sx={{
+    <Paper elevation={3} sx={{
         padding: "2rem",
         margin: "2rem 0",
-        borderRadius: "1rem",
+        borderRadius: "1.5rem",
         width: "20rem"
     }}>
         <Stack alignItems={"center"} spacing={"1rem"}>
@@ -115,7 +120,7 @@ const Widget = ({ title, value, Icon }) => (
 
             }} >{value}</Typography>
 
-            <Stack>{Icon}
+            <Stack direction={"row"} spacing={"1rem"} alignItems={"center"}>{Icon}
                 <Typography >{title}</Typography>
 
             </Stack>
