@@ -92,4 +92,52 @@ export const dashboardData = {
       groups: 25,
     },
   ],
+  chats: [
+    {
+      name: "Lansan Group",
+      avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+      _id: "1",
+      groupChat: true,
+      members: [
+        {
+          _id: "1",
+          avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+        },
+        {
+          _id: "2",
+          avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+        },
+      ],
+      totalMembers: 2,
+      totalMessages: 20,
+      username: "john_doe",
+      creator: {
+        avatar: " https://www.w3schools.com/howto/img_avatar.png",
+        name: "John Doe",
+      },
+    },
+    {
+      name: "lavdeen Group",
+      avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+      _id: "2",
+      groupChat: true,
+      members: [
+        {
+          _id: "1",
+          avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+        },
+        {
+          _id: "2",
+          avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+        },
+      ],
+      totalMembers: 2,
+      totalMessages: 20,
+      username: "john_doe",
+      creator: {
+        avatar: " https://www.w3schools.com/howto/img_avatar.png",
+        name: "John Doe",
+      },
+    },
+  ],
 };

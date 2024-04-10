@@ -4,6 +4,7 @@ import Table from '../../components/shared/Table'
 import { Avatar } from "@mui/material"
 import { dashboardData } from '../../constants/sampleData'
 import { transformImage } from "../../lib/Features"
+
 const columns = [{
     field: "id",
     headerName: "ID",
