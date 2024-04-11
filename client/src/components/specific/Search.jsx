@@ -8,7 +8,6 @@ import { setIsSearch } from "../../redux/reducers/misc"
 import { useLazySearchUserQuery, useSendFriendRequestMutation } from "../../redux/api/api"
 import { useAsyncMutation } from "../../hooks/hook"
 
-
 const Search = () => {
     const { isSearch } = useSelector(state => state.misc);
 

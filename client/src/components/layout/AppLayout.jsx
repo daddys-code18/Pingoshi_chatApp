@@ -1,6 +1,5 @@
 // import Title from "../shared/Title";
 import { useParams } from "react-router-dom";
-import { sampleChats } from "../../constants/sampleData";
 import ChatList from "../specific/ChatList";
 import Header from "./Header";
 import { Grid, Skeleton, Drawer } from '@mui/material';
@@ -20,6 +19,7 @@ const AppLayout = () => (WrappedComponent) => {
 
 
         const { isMobile } = useSelector((state) => state.misc);
+        const { user } = useSelector((state) => state.auth);
 
         const { isLoading, data, isError, error, refetch } = useMyChatsQuery("");
         useErrors([{ isError, error }]);
@@ -74,14 +74,12 @@ const AppLayout = () => (WrappedComponent) => {
                         padding: "2rem",
                         bgcolor: "rgba(0,0,0,0.85)"
                     }} height={"100%"}>
-                        <Profile />
+                        <Profile user={user} />
                     </Grid>
 
                 </Grid>
 
-                <div>
-                    Footer
-                </div>
+
 
             </>
 
