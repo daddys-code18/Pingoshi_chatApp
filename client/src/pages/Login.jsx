@@ -34,10 +34,10 @@ const Login = () => {
         const config = {
             withCredentials: true,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+            },
+        };
 
-            }
-        }
         try {
             const { data } = await axios.post(`${server}/api/v1/user/login`, { username: username.value, password: password.value }, config)
             dispatch(userExists(data.user));
@@ -58,10 +58,10 @@ const Login = () => {
         const config = {
             withCredentials: true,
             headers: {
-                "Content-Type": "multipart/form-data"
+                "Content-Type": "multipart/form-data",
+            },
+        };
 
-            }
-        }
         try {
             const { data } = await axios.post(`${server}/api/v1/user/new`, formData, config);
             dispatch(userExists(data.user))

@@ -14,9 +14,15 @@ import {
 const SearchDialog = lazy(() => import('../specific/Search'))
 const NotificationsDialog = lazy(() => import('../specific/Notifications'))
 const NewGroupDialog = lazy(() => import('../specific/Newgroup'))
+import axios from 'axios';
+import { server } from "../../constants/config";
+import { useDispatch } from 'react-redux';
+import { userNotExists } from "../../redux/reducers/auth";
+import toast from "react-hot-toast";
 
 const Header = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [isMobile, setIsMobile] = useState(false)
     const [isSearch, setIsSearch] = useState(false)
@@ -38,8 +44,17 @@ const Header = () => {
 
     const navigateToGroup = () => navigate("/groups")
 
-    const logouthandler = () => {
-        console.log("logout")
+    const logouthandler = async () => {
+        try {
+            const { data } = await axios.get(`${server}/api/v1/user/logout`, { withCredentials: true })
+            toast.success(data.message)
+            dispatch(userNotExists())
+
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Something Went Wrong")
+
+        }
+
     }
     return (
 
