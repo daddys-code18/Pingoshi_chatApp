@@ -19,19 +19,23 @@ import { server } from "../../constants/config";
 import { useDispatch } from 'react-redux';
 import { userNotExists } from "../../redux/reducers/auth";
 import toast from "react-hot-toast";
+import {
+    setIsMobile,
+    setIsNewGroup,
+    setIsNotification,
+    setIsSearch,
+} from "../../redux/reducers/misc";
 
 const Header = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [isMobile, setIsMobile] = useState(false)
     const [isSearch, setIsSearch] = useState(false)
     const [isNewGroup, setIsNewGroup] = useState(false)
     const [isNotification, setIsNotification] = useState(false)
 
-    const handleMobile = () => {
-        setIsMobile((prev) => !prev)
-    }
+    const handleMobile = () => dispatch(setIsMobile(true))
+
     const openSearch = () => {
         setIsSearch((prev) => !prev)
     }
