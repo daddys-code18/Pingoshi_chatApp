@@ -15,6 +15,7 @@ import { useErrors, useSocketEvents } from "../hooks/hook";
 import { useInfiniteScrollTop } from "6pp"
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { removeNewMessagesAlert } from '../redux/reducers/chat';
 
 
 const Chat = ({ chatId, user }) => {
@@ -68,6 +69,7 @@ const Chat = ({ chatId, user }) => {
 
 
     useEffect(() => {
+        dispatch(removeNewMessagesAlert(chatId))
         return () => {
             SetMessage("");
             SetMessages([]);
