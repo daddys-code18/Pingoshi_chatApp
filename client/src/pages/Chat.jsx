@@ -9,12 +9,19 @@ import MessageComponent from '../components/shared/MessageComponent';
 import { getSocket } from '../socket';
 import { NEW_MESSAGE } from "../constants/event";
 import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api';
+import { setIsFileMenu } from "../redux/reducers/misc";
 
 import { useErrors, useSocketEvents } from "../hooks/hook";
 import { useInfiniteScrollTop } from "6pp"
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 
 const Chat = ({ chatId, user }) => {
     const containerRef = useRef(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const socket = getSocket();
 
 
@@ -23,6 +30,7 @@ const Chat = ({ chatId, user }) => {
     const [messages, SetMessages] = useState([]);
 
     const [page, setPage] = useState(1);
+    const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
 
     const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId })
     const oldMessagesChunk = useGetMessagesQuery({ chatId, page });
@@ -40,10 +48,14 @@ const Chat = ({ chatId, user }) => {
         { isError: chatDetails.isError, error: chatDetails.error },
         { isError: oldMessagesChunk.isError, error: oldMessagesChunk.error },
     ];
-    console.log("oldmess", oldMessages)
 
     const members = chatDetails?.data?.chat?.members;
 
+
+    const handleFileOpen = (e) => {
+        dispatch(setIsFileMenu(true));
+        setFileMenuAnchor(e.currentTarget);
+    };
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -107,7 +119,7 @@ const Chat = ({ chatId, user }) => {
                         position: "absolute",
                         left: "1.5rem",
                         rotate: "30deg"
-                    }}>
+                    }} onClick={handleFileOpen}>
                         <AttachFileIcon />
                     </IconButton>
 
@@ -127,7 +139,7 @@ const Chat = ({ chatId, user }) => {
                 </Stack>
 
             </form>
-            <FileMenu />
+            <FileMenu anchorEl={fileMenuAnchor} chatId={chatId} />
 
         </>)
 }

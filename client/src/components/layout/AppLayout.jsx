@@ -7,8 +7,15 @@ import Profile from "../specific/Profile";
 import { useMyChatsQuery } from "../../redux/api/api";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useErrors } from "../../hooks/hook"
 import { getSocket } from "../../socket";
+import { useErrors, useSocketEvents } from "../../hooks/hook";
+
+import {
+    NEW_MESSAGE_ALERT,
+    // NEW_REQUEST,
+    // ONLINE_USERS,
+    // REFETCH_CHATS,
+} from "../../constants/event";
 
 const AppLayout = () => (WrappedComponent) => {
 
@@ -35,6 +42,14 @@ const AppLayout = () => (WrappedComponent) => {
         const handleMobileClose = () => dispatch(setIsMobile(false));
 
 
+        // const eventHandlers = {
+        //     // [NEW_MESSAGE_ALERT]: newMessageAlertListener,
+        //     // [NEW_REQUEST]: newRequestListener,
+        //     // [REFETCH_CHATS]: refetchListener,
+        //     // [ONLINE_USERS]: onlineUsersListener,
+        // };
+
+        // useSocketEvents(socket, eventHandlers);
 
         return (
             <>
