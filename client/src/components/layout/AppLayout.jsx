@@ -4,15 +4,19 @@ import ChatList from "../specific/ChatList";
 import Header from "./Header";
 import { Grid, Skeleton, Drawer } from '@mui/material';
 import Profile from "../specific/Profile";
+import {
+    incrementNotification,
+    // setNewMessagesAlert,
+} from "../../redux/reducers/chat";
 import { useMyChatsQuery } from "../../redux/api/api";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { getSocket } from "../../socket";
 import { useErrors, useSocketEvents } from "../../hooks/hook";
-
+import { useCallback } from "react"
 import {
     NEW_MESSAGE_ALERT,
-    // NEW_REQUEST,
+    NEW_REQUEST,
     // ONLINE_USERS,
     // REFETCH_CHATS,
 } from "../../constants/event";
@@ -42,14 +46,19 @@ const AppLayout = () => (WrappedComponent) => {
         const handleMobileClose = () => dispatch(setIsMobile(false));
 
 
-        // const eventHandlers = {
-        //     // [NEW_MESSAGE_ALERT]: newMessageAlertListener,
-        //     // [NEW_REQUEST]: newRequestListener,
-        //     // [REFETCH_CHATS]: refetchListener,
-        //     // [ONLINE_USERS]: onlineUsersListener,
-        // };
+        const newRequestListener = useCallback(() => {
+            dispatch(incrementNotification());
+        }, [dispatch]);
 
-        // useSocketEvents(socket, eventHandlers);
+        const newMessageAlertListener = () => { }
+        const eventHandlers = {
+            [NEW_MESSAGE_ALERT]: newMessageAlertListener,
+            [NEW_REQUEST]: newRequestListener,
+            // [REFETCH_CHATS]: refetchListener,
+            // [ONLINE_USERS]: onlineUsersListener,
+        };
+
+        useSocketEvents(socket, eventHandlers);
 
         return (
             <>

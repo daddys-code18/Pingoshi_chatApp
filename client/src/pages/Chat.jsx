@@ -1,7 +1,7 @@
 import AppLayout from '../components/layout/AppLayout'
 import { IconButton, Skeleton, Stack } from '@mui/material';
 import { grayColor, orange } from '../constants/color';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { AttachFile as AttachFileIcon, Send as SendIcon } from '@mui/icons-material';
 import { InputBox } from './../components/styles/StyledComponents';
 import FileMenu from '../components/dialogs/FileMenu';
@@ -67,9 +67,19 @@ const Chat = ({ chatId, user }) => {
     }
 
 
+    useEffect(() => {
+        return () => {
+            SetMessage("");
+            SetMessages([]);
+            setOldMessages([]);
+            setPage(1);
+        }
+    }, [chatId])
+
+
     const newMessagesListener = useCallback(
         (data) => {
-            // if (data.chatId !== chatId) return;
+            if (data.chatId !== chatId) return;
 
             SetMessages((prev) => [...prev, data.message]);
         },
