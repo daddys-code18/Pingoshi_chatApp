@@ -11,6 +11,7 @@ import { NEW_MESSAGE } from "../constants/event";
 import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api';
 
 import { useErrors, useSocketEvents } from "../hooks/hook";
+import { useInfiniteScrollTop } from "6pp"
 
 const Chat = ({ chatId, user }) => {
     const containerRef = useRef(null);
@@ -18,18 +19,28 @@ const Chat = ({ chatId, user }) => {
 
 
     const [message, SetMessage] = useState("");
+
     const [messages, SetMessages] = useState([]);
+
     const [page, setPage] = useState(1);
 
     const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId })
     const oldMessagesChunk = useGetMessagesQuery({ chatId, page });
+
+    const { data: oldMessages, setData: setOldMessages } = useInfiniteScrollTop(
+        containerRef,
+        oldMessagesChunk.data?.totalPages,
+        page,
+        setPage,
+        oldMessagesChunk.data?.messages
+    );
 
 
     const errors = [
         { isError: chatDetails.isError, error: chatDetails.error },
         { isError: oldMessagesChunk.isError, error: oldMessagesChunk.error },
     ];
-    console.log("oldmess", oldMessagesChunk.data)
+    console.log("oldmess", oldMessages)
 
     const members = chatDetails?.data?.chat?.members;
 
@@ -46,7 +57,7 @@ const Chat = ({ chatId, user }) => {
 
     const newMessagesListener = useCallback(
         (data) => {
-            if (data.chatId !== chatId) return;
+            // if (data.chatId !== chatId) return;
 
             SetMessages((prev) => [...prev, data.message]);
         },
@@ -63,7 +74,7 @@ const Chat = ({ chatId, user }) => {
 
     useSocketEvents(socket, eventHandler);
     useErrors(errors);
-    // const allMessages = [...oldMessagesChunk.data.messages, ...messages];
+    const allMessages = [...oldMessages, ...messages];
     // console.log(allMessages)
 
     return chatDetails.isLoading ? <Skeleton /> : (
@@ -79,14 +90,9 @@ const Chat = ({ chatId, user }) => {
                     overflowX: "hidden",
                     overflowY: "auto"
                 }} >
-                {/* {
-                    allMessages.data?.messages.map((i) => (
-                        <MessageComponent message={i} key={i._id}
-                            user={user} />
-                    ))
-                } */}
+
                 {
-                    messages.map((i) => (
+                    allMessages.map((i) => (
                         <MessageComponent message={i} key={i._id}
                             user={user} />
                     ))

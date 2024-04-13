@@ -11,7 +11,6 @@ const MessageComponent = ({ message, user }) => {
 
     const sameSender = sender?._id === user?._id;
 
-    console.log(sender?._id, user._id)
     const timeAgo = moment(createdAt).fromNow();
     return (
         <div style={{
