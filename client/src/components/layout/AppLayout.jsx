@@ -8,6 +8,7 @@ import { useMyChatsQuery } from "../../redux/api/api";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useErrors } from "../../hooks/hook"
+import { getSocket } from "../../socket";
 
 const AppLayout = () => (WrappedComponent) => {
 
@@ -16,6 +17,7 @@ const AppLayout = () => (WrappedComponent) => {
         const dispatch = useDispatch();
         const chatId = params.chatId;
 
+        const socket = getSocket()
 
 
         const { isMobile } = useSelector((state) => state.misc);
@@ -65,7 +67,7 @@ const AppLayout = () => (WrappedComponent) => {
 
                     <Grid item xs={12} md={5} lg={6}
                         height={"100%"}>
-                        <WrappedComponent {...props} />
+                        <WrappedComponent {...props} chatId={chatId} user={user} />
 
                     </Grid>
 

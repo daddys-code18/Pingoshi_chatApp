@@ -1,21 +1,72 @@
 import AppLayout from '../components/layout/AppLayout'
-import { IconButton, Stack } from '@mui/material';
+import { IconButton, Skeleton, Stack } from '@mui/material';
 import { grayColor, orange } from '../constants/color';
-import { useRef } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { AttachFile as AttachFileIcon, Send as SendIcon } from '@mui/icons-material';
 import { InputBox } from './../components/styles/StyledComponents';
 import FileMenu from '../components/dialogs/FileMenu';
-import { sampleMessage } from '../constants/sampleData';
 import MessageComponent from '../components/shared/MessageComponent';
+import { getSocket } from '../socket';
+import { NEW_MESSAGE } from "../constants/event";
+import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api';
 
-const Chat = () => {
+import { useErrors, useSocketEvents } from "../hooks/hook";
+
+const Chat = ({ chatId, user }) => {
     const containerRef = useRef(null);
+    const socket = getSocket();
 
-    const user = {
-        _id: "cacdcdc",
-        name: "Pavan Kafare"
+
+    const [message, SetMessage] = useState("");
+    const [messages, SetMessages] = useState([]);
+    const [page, setPage] = useState(1);
+
+    const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId })
+    const oldMessagesChunk = useGetMessagesQuery({ chatId, page });
+
+
+    const errors = [
+        { isError: chatDetails.isError, error: chatDetails.error },
+        { isError: oldMessagesChunk.isError, error: oldMessagesChunk.error },
+    ];
+    console.log("oldmess", oldMessagesChunk.data)
+
+    const members = chatDetails?.data?.chat?.members;
+
+
+    const submitHandler = (e) => {
+        e.preventDefault()
+        if (!message.trim()) return
+
+        /// Emittinhg Message to the Server
+        socket.emit(NEW_MESSAGE, { chatId, members, message })
+        SetMessage("")
     }
-    return (
+
+
+    const newMessagesListener = useCallback(
+        (data) => {
+            if (data.chatId !== chatId) return;
+
+            SetMessages((prev) => [...prev, data.message]);
+        },
+        [chatId]
+    );
+
+
+    const eventHandler = {
+        // [ALERT]: alertListener,
+        [NEW_MESSAGE]: newMessagesListener,
+        // [START_TYPING]: startTypingListener,
+        // [STOP_TYPING]: stopTypingListener,
+    };
+
+    useSocketEvents(socket, eventHandler);
+    useErrors(errors);
+    // const allMessages = [...oldMessagesChunk.data.messages, ...messages];
+    // console.log(allMessages)
+
+    return chatDetails.isLoading ? <Skeleton /> : (
         <>
             <Stack ref={containerRef}
                 boxSizing={"border-box"}
@@ -28,14 +79,20 @@ const Chat = () => {
                     overflowX: "hidden",
                     overflowY: "auto"
                 }} >
+                {/* {
+                    allMessages.data?.messages.map((i) => (
+                        <MessageComponent message={i} key={i._id}
+                            user={user} />
+                    ))
+                } */}
                 {
-                    sampleMessage.map((i, index) => (
+                    messages.map((i) => (
                         <MessageComponent message={i} key={i._id}
                             user={user} />
                     ))
                 }
             </Stack>
-            <form style={{ height: "10%" }}>
+            <form style={{ height: "10%" }} onSubmit={submitHandler}>
                 <Stack direction={"row"} height={"100%"}
                     padding={"1rem"}
                     alignItems={"center"}
@@ -48,7 +105,7 @@ const Chat = () => {
                         <AttachFileIcon />
                     </IconButton>
 
-                    <InputBox placeholder='Type message here...' />
+                    <InputBox placeholder='Type message here...' value={message} onChange={(e) => SetMessage(e.target.value)} />
                     <IconButton type='submit' sx={{
                         rotate: "-30deg",
                         backgroundColor: orange,
