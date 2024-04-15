@@ -6,11 +6,10 @@ import { bgGradient, matBlack } from "../constants/color"
 import { Suspense, lazy, memo, useEffect, useState } from 'react';
 import { Link } from "../components/styles/StyledComponents"
 import AvatarCard from './../components/shared/AvatarCard';
-import { sampleChats, sampleUsers } from './../constants/sampleData';
 import UserItem from '../components/shared/UserItem';
-import { useMyGroupsQuery } from '../redux/api/api';
+import { useMyGroupsQuery, useChatDetailsQuery, useRenameGroupMutation } from '../redux/api/api';
 import {
-    //  useAsyncMutation,
+    useAsyncMutation,
     useErrors
 } from "../hooks/hook";
 
@@ -29,7 +28,16 @@ const Group = () => {
         navigate("/")
     }
     const myGroups = useMyGroupsQuery("")
-    // console.log(myGroups.data)
+
+    const groupDetails = useChatDetailsQuery(
+        { chatId, populate: true },
+        { skip: !chatId }
+    );
+
+    const [updateGroup, isLoadingGroupName] = useAsyncMutation(
+        useRenameGroupMutation
+    );
+    // console.log(groupDetails.data)
     // console.log(chatId)
     const [isedit, setIsEdit] = useState(true)
 
@@ -37,20 +45,37 @@ const Group = () => {
     const [groupName, setGroupName] = useState("")
     const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("")
     const [confrimDeleteDialog, setConfrimDeleteDialog] = useState(false)
+
+
+    const [members, setMembers] = useState([]);
     const errors = [
         {
             isError: myGroups.isError,
             error: myGroups.error,
         },
-        // {
-        //   isError: groupDetails.isError,
-        //   error: groupDetails.error,
-        // },
+        {
+            isError: groupDetails.isError,
+            error: groupDetails.error,
+        },
     ];
 
     useErrors(errors);
 
+    useEffect(() => {
+        const groupData = groupDetails.data;
+        if (groupData) {
+            setGroupName(groupData.chat.name);
+            setGroupNameUpdatedValue(groupData.chat.name);
+            setMembers(groupData.chat.members);
+        }
 
+        return () => {
+            setGroupName("");
+            setGroupNameUpdatedValue("");
+            setMembers([]);
+            setIsEdit(false);
+        };
+    }, [groupDetails.data]);
 
 
     const handleMobile = () => {
@@ -61,7 +86,11 @@ const Group = () => {
         setIsMobileOpen(false)
     }
     const updateGroupName = () => {
-        setIsEdit(false)
+        setIsEdit(false);
+        updateGroup("Updating Group Name...", {
+            chatId,
+            name: groupNameUpdatedValue,
+        });
         console.log(groupNameUpdatedValue)
     };
 
@@ -179,7 +208,7 @@ const Group = () => {
                     sm: "block",
                 },
             }} sm={4}
-            > <GroupList myGroups={sampleChats} chatId={chatId} />
+            > <GroupList myGroups={myGroups?.data?.groups} chatId={chatId} />
 
             </Grid>
 
@@ -214,7 +243,7 @@ const Group = () => {
                                 // Member 
                             }
                             {
-                                sampleUsers.map((i) => (
+                                members.map((i) => (
                                     <UserItem user={i} key={i._id} isAdded styling={{
                                         boxShadow: "0 0 0.5rem rgba(0,0,0,0.2)",
                                         padding: "1rem 2rem",
@@ -251,7 +280,7 @@ const Group = () => {
                 },
 
             }}>
-                <GroupList w={"50vw"} myGroups={sampleChats} chatId={chatId} />
+                <GroupList w={"50vw"} myGroups={myGroups?.data?.groups} chatId={chatId} />
             </Drawer>
         </Grid>
     )
