@@ -7,7 +7,8 @@ import { InputBox } from './../components/styles/StyledComponents';
 import FileMenu from '../components/dialogs/FileMenu';
 import MessageComponent from '../components/shared/MessageComponent';
 import { getSocket } from '../socket';
-import { NEW_MESSAGE } from "../constants/event";
+import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../constants/event";
+import { TypingLoader } from '../components/layout/Loader';
 import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api';
 import { setIsFileMenu } from "../redux/reducers/misc";
 
@@ -20,6 +21,9 @@ import { removeNewMessagesAlert } from '../redux/reducers/chat';
 
 const Chat = ({ chatId, user }) => {
     const containerRef = useRef(null);
+    const BottomRef = useRef(null);
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -32,6 +36,10 @@ const Chat = ({ chatId, user }) => {
 
     const [page, setPage] = useState(1);
     const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
+
+    const [IamTyping, setIamTyping] = useState(false);
+    const [userTyping, setUserTyping] = useState(false);
+    const typingTimeout = useRef(null);
 
     const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId })
     const oldMessagesChunk = useGetMessagesQuery({ chatId, page });
@@ -52,6 +60,20 @@ const Chat = ({ chatId, user }) => {
 
     const members = chatDetails?.data?.chat?.members;
 
+    const messageOnChange = (e) => {
+        SetMessage(e.target.value)
+        if (!IamTyping) {
+            socket.emit(START_TYPING, { members, chatId });
+            setIamTyping(true);
+        }
+
+        if (typingTimeout.current) clearTimeout(typingTimeout.current);
+
+        typingTimeout.current = setTimeout(() => {
+            socket.emit(STOP_TYPING, { members, chatId });
+            setIamTyping(false);
+        }, [2000]);
+    }
 
     const handleFileOpen = (e) => {
         dispatch(setIsFileMenu(true));
@@ -78,10 +100,34 @@ const Chat = ({ chatId, user }) => {
         }
     }, [chatId])
 
+    useEffect(() => {
+        if (BottomRef.current)
+            BottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const startTypingListener = useCallback(
+        (data) => {
+            if (data.chatId !== chatId) return;
+
+            setUserTyping(true);
+        },
+        [chatId]
+    );
+
+    const stopTypingListener = useCallback(
+        (data) => {
+            if (data.chatId !== chatId) return;
+
+            setUserTyping(false);
+        },
+        [chatId]
+    );
+
 
     const newMessagesListener = useCallback(
         (data) => {
             if (data.chatId !== chatId) return;
+
 
             SetMessages((prev) => [...prev, data.message]);
         },
@@ -92,8 +138,8 @@ const Chat = ({ chatId, user }) => {
     const eventHandler = {
         // [ALERT]: alertListener,
         [NEW_MESSAGE]: newMessagesListener,
-        // [START_TYPING]: startTypingListener,
-        // [STOP_TYPING]: stopTypingListener,
+        [START_TYPING]: startTypingListener,
+        [STOP_TYPING]: stopTypingListener,
     };
 
     useSocketEvents(socket, eventHandler);
@@ -121,6 +167,9 @@ const Chat = ({ chatId, user }) => {
                             user={user} />
                     ))
                 }
+                {userTyping && <TypingLoader />}
+
+                <div ref={BottomRef} />
             </Stack>
             <form style={{ height: "10%" }} onSubmit={submitHandler}>
                 <Stack direction={"row"} height={"100%"}
@@ -135,7 +184,7 @@ const Chat = ({ chatId, user }) => {
                         <AttachFileIcon />
                     </IconButton>
 
-                    <InputBox placeholder='Type message here...' value={message} onChange={(e) => SetMessage(e.target.value)} />
+                    <InputBox placeholder='Type message here...' value={message} onChange={messageOnChange} />
                     <IconButton type='submit' sx={{
                         rotate: "-30deg",
                         backgroundColor: orange,
