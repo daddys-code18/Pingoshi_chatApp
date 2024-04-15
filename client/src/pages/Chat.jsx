@@ -7,7 +7,7 @@ import { InputBox } from './../components/styles/StyledComponents';
 import FileMenu from '../components/dialogs/FileMenu';
 import MessageComponent from '../components/shared/MessageComponent';
 import { getSocket } from '../socket';
-import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../constants/event";
+import { ALERT, NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../constants/event";
 import { TypingLoader } from '../components/layout/Loader';
 import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api';
 import { setIsFileMenu } from "../redux/reducers/misc";
@@ -133,10 +133,26 @@ const Chat = ({ chatId, user }) => {
         },
         [chatId]
     );
+    const alertListener = useCallback(
+        (data) => {
+            if (data.chatId !== chatId) return;
+            const messageForAlert = {
+                content: data.message,
+                sender: {
+                    _id: "djasdhajksdhasdsadasdas",
+                    name: "Admin",
+                },
+                chat: chatId,
+                createdAt: new Date().toISOString(),
+            };
 
+            SetMessages((prev) => [...prev, messageForAlert]);
+        },
+        [chatId]
+    );
 
     const eventHandler = {
-        // [ALERT]: alertListener,
+        [ALERT]: alertListener,
         [NEW_MESSAGE]: newMessagesListener,
         [START_TYPING]: startTypingListener,
         [STOP_TYPING]: stopTypingListener,
