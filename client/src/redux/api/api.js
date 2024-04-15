@@ -158,4 +158,6 @@ export const {
   useGetMessagesQuery,
   useSendAttachmentsMutation,
   useMyGroupsQuery,
+  useAvailableFriendsQuery,
+  useNewGroupMutation,
 } = api;

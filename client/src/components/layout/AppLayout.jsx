@@ -22,9 +22,8 @@ import {
 } from "../../constants/event";
 import { getOrSaveFromStorage } from "../../lib/Features";
 
-const AppLayout = () => (WrappedComponent) => {
-
-    return (props) => {
+      const AppLayout = () => (WrappedComponent) => {
+            return (props) => {
 
         const params = useParams();
         const dispatch = useDispatch();

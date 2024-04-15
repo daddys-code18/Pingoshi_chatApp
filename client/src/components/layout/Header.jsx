@@ -21,6 +21,7 @@ import { userNotExists } from "../../redux/reducers/auth";
 import toast from "react-hot-toast";
 import {
     setIsMobile,
+    setIsNewGroup,
     // setIsNewGroup,
     setIsNotification,
     setIsSearch,
@@ -31,17 +32,16 @@ const Header = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { isSearch, isNotification } = useSelector(state => state.misc)
+    const { isSearch, isNotification, isNewGroup } = useSelector(state => state.misc)
     const { notificationCount } = useSelector(state => state.chat)
 
-    const [isNewGroup, setIsNewGroup] = useState(false)
 
     const handleMobile = () => dispatch(setIsMobile(true))
 
     const openSearch = () => dispatch(setIsSearch(true))
 
     const openNewGroup = () => {
-        setIsNewGroup((prev) => !prev)
+        dispatch(setIsNewGroup(true))
     }
     const openNotification = () => {
         dispatch(setIsNotification(true))

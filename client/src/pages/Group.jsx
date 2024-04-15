@@ -8,17 +8,28 @@ import { Link } from "../components/styles/StyledComponents"
 import AvatarCard from './../components/shared/AvatarCard';
 import { sampleChats, sampleUsers } from './../constants/sampleData';
 import UserItem from '../components/shared/UserItem';
+import { useMyGroupsQuery } from '../redux/api/api';
+import {
+    //  useAsyncMutation,
+    useErrors
+} from "../hooks/hook";
 
 
 const ConfrimDeleteDialog = lazy(() => import("../components/dialogs/ConfrimDeleteDialog"))
 const AddMembersDialog = lazy(() => import("../components/dialogs/AddMembersDialog"))
 // import { removeMembers } from './../../../server/controllers/chatController';
+import { LayoutLoader } from './../components/layout/Loader';
 
 const Group = () => {
     const isAddMember = false
 
     const navigate = useNavigate();
     const chatId = useSearchParams()[0].get("group")
+    const navigateBack = () => {
+        navigate("/")
+    }
+    const myGroups = useMyGroupsQuery("")
+    // console.log(myGroups.data)
     // console.log(chatId)
     const [isedit, setIsEdit] = useState(true)
 
@@ -26,10 +37,22 @@ const Group = () => {
     const [groupName, setGroupName] = useState("")
     const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("")
     const [confrimDeleteDialog, setConfrimDeleteDialog] = useState(false)
+    const errors = [
+        {
+            isError: myGroups.isError,
+            error: myGroups.error,
+        },
+        // {
+        //   isError: groupDetails.isError,
+        //   error: groupDetails.error,
+        // },
+    ];
 
-    const navigateBack = () => {
-        navigate("/")
-    }
+    useErrors(errors);
+
+
+
+
     const handleMobile = () => {
         setIsMobileOpen((prev) => !prev)
 
@@ -148,7 +171,7 @@ const Group = () => {
         </Stack>
 
     </>
-    return (
+    return myGroups.isLoading ? <LayoutLoader /> : (
         <Grid container height={"100vh"}>
             <Grid item sx={{
                 display: {
