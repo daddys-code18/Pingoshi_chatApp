@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, Skeleton, Stack, TextField, Typography } f
 import { useState } from 'react';
 import UserItem from '../shared/UserItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAvailableFriendsQuery, useNewGroupMutation, } from '../../redux/api/api';
+import { useAvailableFriendsQuery, useNewGroupMutation } from '../../redux/api/api';
 import {
     useAsyncMutation,
     useErrors

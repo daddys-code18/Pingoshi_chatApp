@@ -1,5 +1,5 @@
 // import Title from "../shared/Title";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ChatList from "../specific/ChatList";
 import Header from "./Header";
 import { Grid, Skeleton, Drawer } from '@mui/material';
@@ -18,15 +18,16 @@ import {
     NEW_MESSAGE_ALERT,
     NEW_REQUEST,
     // ONLINE_USERS,
-    // REFETCH_CHATS,
+    REFETCH_CHATS,
 } from "../../constants/event";
 import { getOrSaveFromStorage } from "../../lib/Features";
 
-      const AppLayout = () => (WrappedComponent) => {
-            return (props) => {
+const AppLayout = () => (WrappedComponent) => {
+    return (props) => {
 
         const params = useParams();
         const dispatch = useDispatch();
+        const navigate = useNavigate();
         const chatId = params.chatId;
 
         const socket = getSocket()
@@ -65,10 +66,15 @@ import { getOrSaveFromStorage } from "../../lib/Features";
             // console.log("New Message Alert", sd)
         }, [chatId])
 
+        const refetchListener = useCallback(() => {
+            refetch();
+            navigate("/");
+        }, [refetch, navigate]);
+
         const eventHandlers = {
             [NEW_MESSAGE_ALERT]: newMessageAlertListener,
             [NEW_REQUEST]: newRequestListener,
-            // [REFETCH_CHATS]: refetchListener,
+            [REFETCH_CHATS]: refetchListener,
             // [ONLINE_USERS]: onlineUsersListener,
         };
 

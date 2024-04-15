@@ -161,4 +161,6 @@ export const {
   useAvailableFriendsQuery,
   useNewGroupMutation,
   useRenameGroupMutation,
+  useRemoveGroupMemberMutation,
+  useAddGroupMembersMutation,
 } = api;

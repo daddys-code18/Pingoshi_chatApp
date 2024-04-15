@@ -7,7 +7,7 @@ import { Suspense, lazy, memo, useEffect, useState } from 'react';
 import { Link } from "../components/styles/StyledComponents"
 import AvatarCard from './../components/shared/AvatarCard';
 import UserItem from '../components/shared/UserItem';
-import { useMyGroupsQuery, useChatDetailsQuery, useRenameGroupMutation } from '../redux/api/api';
+import { useMyGroupsQuery, useChatDetailsQuery, useRenameGroupMutation, useRemoveGroupMemberMutation } from '../redux/api/api';
 import {
     useAsyncMutation,
     useErrors
@@ -36,6 +36,9 @@ const Group = () => {
 
     const [updateGroup, isLoadingGroupName] = useAsyncMutation(
         useRenameGroupMutation
+    );
+    const [removeMember, isLoadingRemoveMember] = useAsyncMutation(
+        useRemoveGroupMemberMutation
     );
     // console.log(groupDetails.data)
     // console.log(chatId)
@@ -91,7 +94,6 @@ const Group = () => {
             chatId,
             name: groupNameUpdatedValue,
         });
-        console.log(groupNameUpdatedValue)
     };
 
     const confirmDeleteHandler = () => {
@@ -111,8 +113,9 @@ const Group = () => {
         closeConfrimDeleteHandler()
     }
 
-    const removeMembersHandler = (id) => {
-        console.log("remove Member", id)
+    const removeMembersHandler = (userId) => {
+
+        removeMember("Removing Member...", { chatId, userId });
     }
     useEffect(() => {
         if (chatId) {
@@ -173,11 +176,11 @@ const Group = () => {
 
 
                     </TextField>
-                    <IconButton onClick={updateGroupName}><DoneIcon /></IconButton>
+                    <IconButton onClick={updateGroupName} disabled={isLoadingGroupName}><DoneIcon /></IconButton>
 
                 </> : <>
                     <Typography variant='h4'>{groupName}</Typography>
-                    <IconButton onClick={() => setIsEdit(true)}>
+                    <IconButton onClick={() => setIsEdit(true)} disabled={isLoadingGroupName}>
                         <EditIcon />
                     </IconButton>
 
