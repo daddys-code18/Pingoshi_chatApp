@@ -163,4 +163,5 @@ export const {
   useRenameGroupMutation,
   useRemoveGroupMemberMutation,
   useAddGroupMembersMutation,
+  useDeleteChatMutation,
 } = api;

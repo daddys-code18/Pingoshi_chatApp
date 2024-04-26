@@ -1,15 +1,13 @@
-import { DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions, Button, Stack, Skeleton } from '@mui/material';
-import { sampleUsers } from '../../constants/sampleData';
-import { Typography } from '@mui/material';
-import UserItem from "../shared/UserItem"
+import { Button, Dialog, DialogTitle, Skeleton, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useAsyncMutation, useErrors } from "../../hooks/hook";
 import {
     useAddGroupMembersMutation,
     useAvailableFriendsQuery,
 } from "../../redux/api/api";
-import { useDispatch, useSelector } from "react-redux";
 import { setIsAddMember } from '../../redux/reducers/misc';
-import { useAsyncMutation, useErrors } from "../../hooks/hook";
+import UserItem from "../shared/UserItem";
 
 const AddMembersDialog = ({ chatId }) => {
     const dispatch = useDispatch()

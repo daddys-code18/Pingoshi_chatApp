@@ -1,13 +1,13 @@
 
 import { useNavigate, useSearchParams, } from 'react-router-dom';
-import { Box, IconButton, Tooltip, Grid, Drawer, Stack, Typography, TextField, Button, Backdrop } from '@mui/material';
+import { Box, IconButton, Tooltip, Grid, Drawer, Stack, Typography, TextField, Button, Backdrop, CircularProgress } from '@mui/material';
 import { Menu as MenuIcon, KeyboardBackspace as KeyboardBackspaceIcon, Edit as EditIcon, Done as DoneIcon, Delete as DeleteIcon, Add as AddIcon, } from "@mui/icons-material"
 import { bgGradient, matBlack } from "../constants/color"
 import { Suspense, lazy, memo, useEffect, useState } from 'react';
 import { Link } from "../components/styles/StyledComponents"
 import AvatarCard from './../components/shared/AvatarCard';
 import UserItem from '../components/shared/UserItem';
-import { useMyGroupsQuery, useChatDetailsQuery, useRenameGroupMutation, useRemoveGroupMemberMutation } from '../redux/api/api';
+import { useMyGroupsQuery, useDeleteChatMutation, useChatDetailsQuery, useRenameGroupMutation, useRemoveGroupMemberMutation } from '../redux/api/api';
 import {
     useAsyncMutation,
     useErrors
@@ -44,6 +44,10 @@ const Group = () => {
     );
     const [removeMember, isLoadingRemoveMember] = useAsyncMutation(
         useRemoveGroupMemberMutation
+    );
+
+    const [deleteGroup, isLoadingDeleteGroup] = useAsyncMutation(
+        useDeleteChatMutation
     );
     // console.log(groupDetails.data)
     // console.log(chatId)
@@ -115,8 +119,10 @@ const Group = () => {
         console.log("Add Member")
     }
     const deleteHandler = () => {
-        console.log("Dlete Handler")
-        closeConfrimDeleteHandler()
+        deleteGroup("Deleting Group...", chatId);
+        closeConfrimDeleteHandler();
+        navigate("/groups");
+
     }
 
     const removeMembersHandler = (userId) => {
@@ -252,7 +258,7 @@ const Group = () => {
                                 // Member 
                             }
                             {
-                                members.map((i) => (
+                                isLoadingRemoveMember ? <CircularProgress /> : members.map((i) => (
                                     <UserItem user={i} key={i._id} isAdded styling={{
                                         boxShadow: "0 0 0.5rem rgba(0,0,0,0.2)",
                                         padding: "1rem 2rem",

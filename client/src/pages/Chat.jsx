@@ -105,6 +105,11 @@ const Chat = ({ chatId, user }) => {
             BottomRef.current.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+
+    useEffect(() => {
+        if (chatDetails.isError) return navigate("/");
+    }, [chatDetails.isError]);
+
     const startTypingListener = useCallback(
         (data) => {
             if (data.chatId !== chatId) return;
