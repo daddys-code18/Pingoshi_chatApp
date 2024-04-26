@@ -1,5 +1,5 @@
 
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, } from 'react-router-dom';
 import { Box, IconButton, Tooltip, Grid, Drawer, Stack, Typography, TextField, Button, Backdrop } from '@mui/material';
 import { Menu as MenuIcon, KeyboardBackspace as KeyboardBackspaceIcon, Edit as EditIcon, Done as DoneIcon, Delete as DeleteIcon, Add as AddIcon, } from "@mui/icons-material"
 import { bgGradient, matBlack } from "../constants/color"
@@ -12,18 +12,23 @@ import {
     useAsyncMutation,
     useErrors
 } from "../hooks/hook";
-
+import { useDispatch, useSelector } from "react-redux";
 
 const ConfrimDeleteDialog = lazy(() => import("../components/dialogs/ConfrimDeleteDialog"))
 const AddMembersDialog = lazy(() => import("../components/dialogs/AddMembersDialog"))
 // import { removeMembers } from './../../../server/controllers/chatController';
 import { LayoutLoader } from './../components/layout/Loader';
+import { setIsAddMember } from "../redux/reducers/misc";
+
 
 const Group = () => {
-    const isAddMember = false
+    // const isAddMember = false
 
     const navigate = useNavigate();
     const chatId = useSearchParams()[0].get("group")
+    const dispatch = useDispatch();
+    const { isAddMember } = useSelector((state) => state.misc);
+
     const navigateBack = () => {
         navigate("/")
     }
@@ -106,6 +111,7 @@ const Group = () => {
         setConfrimDeleteDialog(false);
     }
     const openAddMemberHandler = () => {
+        dispatch(setIsAddMember(true));
         console.log("Add Member")
     }
     const deleteHandler = () => {
@@ -265,7 +271,7 @@ const Group = () => {
                 isAddMember && <Suspense fallback={
                     <Backdrop open />}>
 
-                    <AddMembersDialog />
+                    <AddMembersDialog chatId={chatId} />
                 </Suspense>
             }
 
