@@ -23,7 +23,7 @@ const ChatList = ({ w = "100%",
                     key={_id}
                     groupChat={groupChat}
                     sameSender={chatId === _id}
-                    henadleDeleteChart={handleDeleteChart} />)
+                    handleDeleteChart={handleDeleteChart} />)
             })}
 
         </Stack>

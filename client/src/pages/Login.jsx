@@ -17,6 +17,7 @@ import toast from "react-hot-toast"
 
 const Login = () => {
     const [isLogin, setIsLogin] = useState(true)
+    const [isLoading, setIsLoading] = useState(false);
     const togglelogin = () => setIsLogin(prev => !prev)
 
     const name = useInputValidation("")
@@ -31,6 +32,8 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+        const toastId = toast.loading("Logging In...");
+        setIsLoading(true)
         const config = {
             withCredentials: true,
             headers: {
@@ -41,14 +44,19 @@ const Login = () => {
         try {
             const { data } = await axios.post(`${server}/api/v1/user/login`, { username: username.value, password: password.value }, config)
             dispatch(userExists(data.user));
-            toast.success(data.message)
+            toast.success(data.message, { id: toastId })
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong");
+            toast.error(error?.response?.data?.message || "Something Went Wrong", {
+                id: toastId,
+            });
+        } finally {
+            setIsLoading(false)
         }
     }
     const handlesingnUp = async (e) => {
         e.preventDefault()
-
+        const toastId = toast.loading("Signing Up...");
+        setIsLoading(true)
         const formData = new FormData();
         formData.append("avatar", avatar.file)
         formData.append("name", name.value)
@@ -65,10 +73,14 @@ const Login = () => {
         try {
             const { data } = await axios.post(`${server}/api/v1/user/new`, formData, config);
             dispatch(userExists(data.user))
-            toast.success(data.message)
+            toast.success(data.message, {
+                id: toastId,
+            })
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong");
+            toast.error(error?.response?.data?.message || "Something Went Wrong", { id: toastId });
 
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -103,9 +115,9 @@ const Login = () => {
                                 <TextField required fullWidth label="Password" type="password" margin="normal" variant="outlined" value={password.value} onChange={password.changeHandler} />
                                 <Button sx={{
                                     marginTop: "1rem"
-                                }} variant="contained" color="primary" fullWidth type="submit">Login</Button>
+                                }} variant="contained" color="primary" fullWidth type="submit" disabled={isLoading}>Login</Button>
                                 <Typography textAlign={"center"} m={"1rem"}>OR</Typography>
-                                <Button sx={{
+                                <Button disabled={isLoading} sx={{
                                 }} variant="text" fullWidth onClick={togglelogin} >Sign Up Instead</Button>
                             </form>
                         </>
@@ -155,11 +167,11 @@ const Login = () => {
                             {/* {password.error && (
                             <Typography color="error" variant="caption">{password.error}</Typography>
                         )} */}
-                            <Button sx={{
+                            <Button disabled={isLoading} sx={{
                                 marginTop: "1rem"
                             }} variant="contained" color="primary" fullWidth type="submit">Sign Up</Button>
                             <Typography textAlign={"center"} m={"1rem"}>OR</Typography>
-                            <Button sx={{
+                            <Button disabled={isLoading} sx={{
                             }} variant="text" fullWidth onClick={togglelogin} >Login Instead</Button>
                         </form>
                     </>)}
