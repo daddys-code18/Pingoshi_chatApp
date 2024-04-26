@@ -18,12 +18,12 @@ const ChatList = ({ w = "100%",
                 const isOnline = members?.some((member) => onlineUsers.includes(member))
 
 
-                return <ChatItem index={index} newMessageAlert={newMessageAlert} isOnline={isOnline} avatar={avatar}
+                return (<ChatItem index={index} newMessageAlert={newMessageAlert} isOnline={isOnline} avatar={avatar}
                     name={name} _id={_id}
                     key={_id}
                     groupChat={groupChat}
                     sameSender={chatId === _id}
-                    henadleDeleteChart={handleDeleteChart} />
+                    henadleDeleteChart={handleDeleteChart} />)
             })}
 
         </Stack>
